@@ -8,7 +8,23 @@ const app = new Hono<{
     DATABASE_URL: string;
     JWT_SECRET: string;
   };
+  Variables: {
+    prisma: any;
+  };
 }>();
+
+app.use("*", async (c, next) => {
+  const prisma = new PrismaClient({
+    datasources: {
+      db: {
+        url: c.env.DATABASE_URL,
+      },
+    },
+  }).$extends(withAccelerate());
+
+  c.set("prisma", prisma);
+  await next();
+});
 
 app.use("/api/v1/blog/*", async (c, next) => {
   const jwt = c.req.header("Authorization");
