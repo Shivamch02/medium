@@ -9,7 +9,7 @@ const Blog = () => {
   console.log(id);
   const { loading, blog } = useBlog({ id: id || "" });
 
-  if (loading) {
+  if (loading || !blog) {
     return (
       <div>
         <AppBar />
