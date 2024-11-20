@@ -24,8 +24,9 @@ const FullBlog = ({ blog }: { blog: Blog }) => {
                   {blog.author.name || "Anonymous"}
                 </div>
                 <div className="pt-2 text-slate-500">
-                  Random catch phrase about the author's ability to grab the
-                  user's attention
+                  Versatile writer skilled in crafting both technical and
+                  creative content. Passionate about delivering clear, engaging,
+                  and high-quality articles that inform and captivate readers.
                 </div>
               </div>
             </div>
