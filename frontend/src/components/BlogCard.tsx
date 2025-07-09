@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 interface BlogCardProps {
   id: string;
@@ -47,24 +48,39 @@ export const Circle = () => {
 
 export const Avatar = ({
   name,
+  email,
   size = "small",
 }: {
   name: string;
+  email?: string;
   size?: "small" | "big";
 }) => {
+  const [showPopup, setShowPopup] = useState(false);
+
   return (
     <div
-      className={`relative inline-flex items-center justify-center ${
-        size === "small" ? "w-6 h-6" : "w-10 h-10"
-      } overflow-hidden bg-gray-600 rounded-full`}
+      className={`relative inline-flex items-center justify-center transition-all duration-200 shadow-md border border-gray-200 ${
+        size === "small" ? "w-8 h-8" : "w-12 h-12"
+      } overflow-hidden bg-gradient-to-tr from-gray-900 via-gray-700 to-gray-500 rounded-full cursor-pointer group`}
+      onMouseEnter={() => setShowPopup(true)}
+      onMouseLeave={() => setShowPopup(false)}
     >
       <span
-        className={`${
-          size === "small" ? "text-xs" : "text-md"
-        } font-extralight text-gray-300`}
+        className={`$${
+          size === "small" ? "text-sm" : "text-lg"
+        } font-semibold text-white`}
       >
         {name[0]}
       </span>
+      {showPopup && (
+        <div className="absolute z-50 top-full left-1/2 -translate-x-1/2 mt-3 min-w-[220px] bg-white rounded-xl shadow-xl border border-gray-200 p-4 flex flex-col items-center animate-fade-in">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-gray-900 via-gray-700 to-gray-500 flex items-center justify-center mb-2">
+            <span className="text-lg font-semibold text-white">{name[0]}</span>
+          </div>
+          <div className="text-base font-bold text-gray-900">{name}</div>
+          {email && <div className="text-sm text-gray-500 mt-1">{email}</div>}
+        </div>
+      )}
     </div>
   );
 };

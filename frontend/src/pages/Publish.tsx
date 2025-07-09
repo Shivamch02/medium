@@ -1,76 +1,76 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { BACKEND_URL } from "../../config";
 import AppBar from "../components/AppBar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const Publish = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  return (
-    <div>
-      {" "}
-      <AppBar />
-      <div className="flex justify-center w-full pt-8">
-        <div className="max-w-screen-lg w-full">
-          <input
-            onChange={(e) => setTitle(e.target.value)}
-            type="text"
-            aria-describedby="helper-text-explanation"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            placeholder="Title"
-          />
-          <TextEditor
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-          />
-          <button
-            onClick={async () => {
-              const response = await axios.post(
-                `${BACKEND_URL}/api/v1/blog`,
-                {
-                  title,
-                  content: description,
-                },
-                {
-                  headers: {
-                    Authorization: localStorage.getItem("token"),
-                  },
-                }
-              );
-              navigate(`/blog/${response.data.id}`);
-            }}
-            type="submit"
-            className="mt-4 inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
-          >
-            Publish post
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
-export const TextEditor = ({
-  onChange,
-}: {
-  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-}) => {
   return (
-    <div className="mt-2">
-      <div className="w-full mb-4">
-        <div className="flex items-center justify-between border">
-          <div className="my-2 bg-white rounded-b-lg w-full">
-            <textarea
-              onChange={onChange}
-              id="editor"
-              rows={8}
-              className="focus:outline-none block w-full px-0 text-sm text-gray-800 bg-white border-0 pl-2"
-              placeholder="Write an article..."
-              required
-            ></textarea>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100 flex flex-col">
+      <AppBar />
+      <div className="flex flex-1 items-center justify-center px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl">
+          {/* Editor Card */}
+          <div className="backdrop-blur-xl bg-white/70 border border-white/40 shadow-2xl rounded-3xl p-10 flex flex-col justify-center min-h-[500px]">
+            <h2 className="text-4xl font-extrabold mb-8 text-gray-900 tracking-tight drop-shadow-lg">Create a New Post</h2>
+            <input
+              onChange={(e) => setTitle(e.target.value)}
+              type="text"
+              aria-describedby="helper-text-explanation"
+              className="mb-6 bg-white/80 border border-gray-300 text-gray-900 text-xl rounded-lg focus:ring-purple-400 focus:border-purple-400 block w-full p-4 font-bold placeholder:font-normal shadow-sm"
+              placeholder="Title of your story..."
+            />
+            <ReactQuill
+              value={description}
+              onChange={setDescription}
+              theme="snow"
+              className="rounded-xl border border-gray-200 min-h-[350px] h-[350px] bg-white/90 shadow-inner"
+              placeholder="Write your amazing story..."
+              modules={{
+                toolbar: [
+                  [{ header: [1, 2, 3, false] }],
+                  ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
+                  ['link', 'image'],
+                  ['clean'],
+                ],
+              }}
+            />
+            <button
+              onClick={async () => {
+                const response = await axios.post(
+                  `${BACKEND_URL}/api/v1/blog`,
+                  {
+                    title,
+                    content: description,
+                  },
+                  {
+                    headers: {
+                      Authorization: localStorage.getItem("token"),
+                    },
+                  }
+                );
+                navigate(`/blog/${response.data.id}`);
+              }}
+              type="submit"
+              className="mt-10 w-full inline-flex items-center justify-center px-6 py-4 text-xl font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-purple-200 transition-all"
+            >
+              Publish Post
+            </button>
+          </div>
+          {/* Illustration / Branding / Tips */}
+          <div className="hidden md:flex flex-col items-center justify-center">
+            <div className="w-full flex flex-col items-center">
+              <img src="https://illustrations.popsy.co/gray/web-design.svg" alt="Create Blog" className="w-80 mb-8 drop-shadow-xl rounded-2xl" />
+              <div className="text-2xl font-semibold text-gray-700 mb-2 text-center">Share your story with the world</div>
+              <div className="text-md text-gray-500 text-center max-w-xs">Craft beautiful articles, engage your audience, and grow your brand with our powerful publishing platform.</div>
+            </div>
           </div>
         </div>
       </div>

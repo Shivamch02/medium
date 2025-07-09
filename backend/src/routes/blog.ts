@@ -18,8 +18,8 @@ blogRouter.use("/*", async (c, next) => {
   const authHeader = c.req.header("Authorization") || "";
   try {
     const user = await verify(authHeader, c.env.JWT_SECRET);
-    if (user) {
-      c.set("userId", user.id);
+    if (user && typeof user.id === "string") {
+      c.set("userId", user.id); // Now TypeScript knows user.id is a string
       await next();
     } else {
       c.status(403);

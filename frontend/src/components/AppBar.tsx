@@ -32,7 +32,7 @@ const AppBar = () => {
           </button>
         </div>
 
-        <Avatar name={"Shivam Chaurasiya"} size={"big"} />
+        <Avatar name={"Shivam Chaurasiya"} email={"shivam@example.com"} size={"big"} />
       </div>
     </div>
   );
